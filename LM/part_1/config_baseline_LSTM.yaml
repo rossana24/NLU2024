@@ -1,0 +1,30 @@
+Dataset:
+  train_dataset_path: ../dataset/PennTreeBank/ptb.train.txt
+  valid_dataset_path: ../dataset/PennTreeBank/ptb.valid.txt
+  test_dataset_path: ../dataset/PennTreeBank/ptb.test.txt
+  batch_size_train: 64
+  batch_size_valid: 128
+  batch_size_test: 128
+Training:
+  optimizer: adamw
+  num_epochs: 200
+  lr: 0.001
+  weight_decay: 0.01
+  clip: 5
+  patience: 3
+  seed: 5
+  save_every: 1
+  run_name: Baseline_model_LSTM
+  tag: complete
+  watch_wandb: True
+  wandb: True
+Model:
+  model_type: baseline_LSTM
+  emb_size: 300
+  hid_size: 200
+  n_layers: 2
+  non_monotone_interval: 5
+  dropout_lstm: 0.1
+  dropout_emb: 0.1
+
+

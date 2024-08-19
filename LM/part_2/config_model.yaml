@@ -1,0 +1,41 @@
+Dataset:
+  train_dataset_path: ../dataset/PennTreeBank/ptb.train.txt
+  valid_dataset_path: ../dataset/PennTreeBank/ptb.valid.txt
+  test_dataset_path: ../dataset/PennTreeBank/ptb.test.txt
+  batch_size_train: 64
+  batch_size_valid: 128
+  batch_size_test: 128
+Training:
+  optimizer: sgd
+  num_epochs: 200
+  eval_path: "/content/drive/MyDrive/NLU/LM/part_2/bin/20240818_102803_Proposed_model_complete_TBPTT/"
+  lr: 1
+  weight_decay: 1.2e-6
+  clip: 5
+  patience: 10
+  schedular_gamma: 0.5
+  seed: 5
+  save_every: 1
+  decay_epoch: 4
+  run_name: Proposed_model
+  tag: TW_VD_l1
+  watch_wandb: True
+  wandb: True
+Model:
+  model_type: proposal
+  emb_size: 300
+  hid_size: 200
+  n_layers: 2
+  tie_weights: True
+  non_monotone_interval: 5
+  dropout_lstm: 0.1
+  dropout_emb: 0.1
+  dropout_locked_i: 0.4
+  dropout_locked_h: 0.3
+  dropout_locked_o: 0.4
+  tbptt: True
+  tbptt_config:
+    mu: 30
+    std: 5
+    p: .95
+
