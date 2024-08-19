@@ -1,0 +1,34 @@
+Dataset:
+  train_path: ../dataset/ATIS/train.json
+  test_path: ../dataset/ATIS/test.json
+  batch_size_train: 128
+  batch_size_valid: 64
+  batch_size_test: 64
+  portion: 0.10
+Training:
+  project_name: Bert_project
+  eval_path: ""
+  gradient_accumulation_steps: 1
+  optimizer: adam
+  num_epochs: 200
+  lr: 0.0001
+  weight_decay: 0
+  clip: 5
+  patience: 10
+  schedular_gamma: 0.5
+  seed: 5
+  save_every: 1
+  decay_epoch: 4
+  run_name: Baseline
+  tag: complete
+  watch_wandb: True
+  wandb: True
+Model:
+  model_type: baseline
+  emb_size: 200
+  hid_size: 300
+  n_layers: 1
+  dropout_emb: 0.1
+  dropout_linear: 0.1
+  dropout_lstm: 0.1
+  bidirectional: True
