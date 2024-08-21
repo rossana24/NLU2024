@@ -53,7 +53,6 @@ class LM_RNN(nn.Module):
          * n_layers (int, optional): Number of RNN layers (default: 1)
         """
 
-        #super(LM_RNN, self).__init__()
         super(LM_LSTM, self).__init__()
         self.embedding = nn.Embedding(output_size, emb_size, padding_idx=pad_index)
         # Pytorch's RNN layer: https://pytorch.org/docs/stable/generated/torch.nn.RNN.html
@@ -108,7 +107,7 @@ class LM_LSTM(nn.Module):
         self.fc = nn.Linear(self.hidden_size, self.output_size)
         self.init_weights()
 
-    def forward(self, src, seq_lengths, hidden=None):
+    def forward(self, src, seq_lengths):
         # Optional: Additional Dropout
         # Comment the lines below to disable additional Dropout
         embedding = self.dropout_emb(self.embedding(src))

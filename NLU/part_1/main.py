@@ -1,6 +1,4 @@
 import torch
-import torch.nn as nn
-import torch.optim as optim
 import pytorch_lightning as pl
 import random
 import numpy as np
@@ -9,16 +7,13 @@ from datetime import datetime
 import os
 import json
 from utils import get_data_loaders, Lang
-from model import ModelIASBaseline, NLUModel
-from conll import evaluate
-from sklearn.metrics import classification_report
+from model import NLUModel
 from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
 
 # Attempt to import wandb for experiment tracking
 try:
     import wandb
-
     deactivate_wandb = 0
 except ImportError:
     print("WANDB is not available please install")
@@ -31,7 +26,7 @@ def main(args):
     Main function to handle training and evaluation of the model.
 
     Args:
-      config (omegaconf.dictconfig.DictConfig): Configuration object containing parameters for training and evaluation.
+     * config (omegaconf.dictconfig.DictConfig): Configuration object containing parameters for training and evaluation.
     """
 
     os.environ['CUDA_LAUNCH_BLOCKING'] = "1"  # Used to report errors on CUDA side
@@ -111,7 +106,7 @@ def main(args):
             devices=1 if torch.cuda.is_available() else None,
             logger=wandb_logger,
             callbacks=[checkpoint_callback, early_stop_callback],
-            log_every_n_steps=1  # None  # This disables per-step logging
+            log_every_n_steps=1
         )
 
         # Train the model
@@ -153,7 +148,7 @@ def main(args):
         trainer = pl.Trainer(
             accelerator='gpu' if torch.cuda.is_available() else 'cpu',
             devices=1 if torch.cuda.is_available() else None,
-            log_every_n_steps=None  # This disables per-step logging
+            log_every_n_steps=None
         )
 
         print("Testing on val loader")

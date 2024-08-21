@@ -46,7 +46,7 @@ def train_loop(data, optimizer, criterion, model, device, batch_size, clip=5):
             n_tokens = [split_batch['number_tokens'].to(device) for split_batch in split_batches]
 
             # Perform the forward and backward passes with TBPTT, accumulate the loss
-            batch_loss, _ = model.tbptt_forward_wrapper(inputs, targets, lengths, n_tokens,
+            batch_loss, _ = model.tbptt_forward_wrapper(inputs, targets, n_tokens,
                                                         optimizer, batch_size,
                                                         criterion, clip)
 

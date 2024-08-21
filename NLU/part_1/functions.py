@@ -1,6 +1,6 @@
 # In depth dataset analysis
 
-from utils import load_data, Counter
+from utils import load_data
 import pandas as pd
 
 

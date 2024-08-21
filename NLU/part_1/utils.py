@@ -1,13 +1,10 @@
 # Add functions or classes used for data loading and preprocessing
 
 import json
-import random
-import numpy as np
 import torch
 from sklearn.model_selection import train_test_split
 from collections import Counter
 import torch.utils.data as data
-from torch.utils.data import DataLoader
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 
 
@@ -114,17 +111,7 @@ def get_data_loaders(args, loaded_lang=None):
                                                       stratify=labels)
     '''
     The stratify parameter in the train_test_split function from the sklearn.model_selection module ensures that the
-    train and test sets have the same proportion of samples for each class label as the original dataset. 
-    Stratified Sampling
-    Stratified sampling involves dividing the dataset into distinct subgroups (strata) and then randomly sampling from 
-    each subgroup in a way that the train and test sets reflect the original distribution of the labels.
-    Purpose
-    The main purpose of using stratify is to maintain the class distribution of the dataset in both the train and test 
-    sets. This is particularly important in the following scenarios:
-    Imbalanced Datasets: When you have an imbalanced dataset where certain classes are underrepresented, 
-    stratifying ensures that these classes are adequately represented in both the train and test sets.
-    Consistency: It provides consistency in the class distribution, which can lead to more reliable and generalizable 
-    model performance.
+    train and test sets have the same proportion of samples for each class label as the original dataset.
     '''
     X_train.extend(mini_train)
     train_raw = X_train
@@ -262,10 +249,6 @@ def collate_fn(data):
         lengths = [len(seq) for seq in sequences]
         # Finds the maximum length in the batch.
         max_len = 1 if max(lengths) == 0 else max(lengths)
-        # Pad token is zero in our case
-        # So we create a matrix full of PAD_TOKEN (i.e. 0) with the shape
-        # batch_size X maximum length of a sequence
-        # Creates a tensor filled with PAD_TOKEN (0 in this case) of shape (batch_size, max_length).
         padded_seqs = torch.LongTensor(len(sequences), max_len).fill_(PAD_TOKEN)
 
         for i, seq in enumerate(sequences):

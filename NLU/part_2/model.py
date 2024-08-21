@@ -1,6 +1,6 @@
 import pytorch_lightning as pl
 import torch.nn as nn
-from transformers import BertConfig, AdamW, get_linear_schedule_with_warmup
+from transformers import get_linear_schedule_with_warmup
 from transformers.models.bert.modeling_bert import BertPreTrainedModel, BertModel, BertConfig
 from sklearn.metrics import classification_report
 from conll import evaluate
@@ -121,7 +121,6 @@ class BertModelSlotsIntent(BertPreTrainedModel):
 
         # Slot classifier using sequence output from BERT
         self.slot_classifier = SlotClassifier(config.hidden_size, self.num_slot_labels, args.Training.dropout)
-
 
     def forward(self, input_ids, attention_mask, token_type_ids):
         outputs = self.bert(input_ids, attention_mask=attention_mask,

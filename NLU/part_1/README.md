@@ -14,4 +14,6 @@ To run the model, execute the main script.
 - Preprocessing: Includes handling of text data and vocabulary creation.
 - Validation Set Creation: During preprocessing, a validation set is created from 10% of the training data. This split helps in evaluating the model's performance during training.
 
-`model.py` file contains the code for defining the model architecture. 
+`model.py` file contains the code for defining the model architecture, training and evaluation steps. 
+
+`functions.py` file contains the code to perform dataset analysis.

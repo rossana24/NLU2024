@@ -105,10 +105,10 @@ class LM_LSTM_proposed_model(nn.Module):
         self.locked_dropout = LockedDropout()
 
         # ____ Uncomment to use normal dropout
-        #self.locked_dropout = nn.Dropout()
-        #self.dropout_i = nn.Dropout(weight_drop_locked_i)
-        #self.dropout_h = nn.Dropout(weight_drop_locked_h)
-        #self.dropout_o = nn.Dropout(weight_drop_locked_o)
+        # self.locked_dropout = nn.Dropout()
+        # self.dropout_i = nn.Dropout(weight_drop_locked_i)
+        # self.dropout_h = nn.Dropout(weight_drop_locked_h)
+        # self.dropout_o = nn.Dropout(weight_drop_locked_o)
 
         self.fc = nn.Linear(self.hidden_size, self.output_size)
 
@@ -124,7 +124,7 @@ class LM_LSTM_proposed_model(nn.Module):
         # Optional: Variational Dropout
         embedding = self.locked_dropout(embedding, dropout=self.weight_drop_locked_i)
         # ____ Uncomment to use normal dropout
-        #embedding = self.dropout_i(embedding)
+        # embedding = self.dropout_i(embedding)
 
         # For TBPTT
         if split_idx is not None and split_idx > 0:
@@ -166,10 +166,10 @@ class LM_LSTM_proposed_model(nn.Module):
                 outputs.append(raw_output)
 
                 # ____ Uncomment to use normal dropout
-                #raw_output, input_sizes = pad_packed_sequence(raw_output, batch_first=True)
-                #raw_output = self.dropout_h(raw_output)
-                #raw_output = pack_padded_sequence(raw_output, input_sizes, batch_first=True)
-                #outputs.append(raw_output)
+                # raw_output, input_sizes = pad_packed_sequence(raw_output, batch_first=True)
+                # raw_output = self.dropout_h(raw_output)
+                # raw_output = pack_padded_sequence(raw_output, input_sizes, batch_first=True)
+                # outputs.append(raw_output)
 
         hidden = new_hidden
         raw_output, input_sizes = pad_packed_sequence(raw_output, batch_first=True)
@@ -179,13 +179,13 @@ class LM_LSTM_proposed_model(nn.Module):
         raw_output = self.locked_dropout(raw_output, self.weight_drop_locked_o)
 
         # ____ Uncomment to use normal dropout
-        #raw_output = self.dropout_o(raw_output)
+        # raw_output = self.dropout_o(raw_output)
 
         outputs.append(raw_output)
         prediction = self.fc(raw_output)
         return prediction.permute(0, 2, 1), hidden
 
-    def tbptt_forward_wrapper(self, inputs, targets, lengths, n_tokens, optimizer, batch_size, criterion, clip):
+    def tbptt_forward_wrapper(self, inputs, targets, n_tokens, optimizer, batch_size, criterion, clip):
         hiddens = self.init_hidden(inputs[0].shape[0])  # Initialize hidden states correctly
 
         batch_loss = 0.0

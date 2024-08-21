@@ -14,6 +14,7 @@ To run the model, execute the main script.
 
 - Model Definition: Specifies how the model is structured and its components.
 - Custom Detokenization: Implements a custom_detokenize function to address sub-tokenization issues based on a contraction map.
+- Training and Evaluation loops.
 
 `utils.py` file contains utility functions for:
 - Data Loading: Functions to load and preprocess data.

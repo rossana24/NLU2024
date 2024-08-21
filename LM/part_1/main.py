@@ -184,7 +184,7 @@ if __name__ == "__main__":
     args = OmegaConf.load('config_baseline_LSTM.yaml')
 
     if deactivate_wandb:
-        # Disable WandB if the library is not availabley
+        # Disable WandB if the library is not available
         args.Training.wandb = False
 
     # Set random seeds for reproducibility

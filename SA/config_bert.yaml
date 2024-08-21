@@ -1,0 +1,23 @@
+Dataset:
+  data_set_name: LAPTOP
+  train_path: dataset/laptop14_train.txt
+  test_path: dataset/laptop14_test.txt
+  batch_size_train: 32
+  batch_size_test: 128
+  threshold: 1
+Training:
+  project_name: Assigment_3
+  optimizer: adam
+  num_epochs: 5
+  dropout: 0.1
+  slot_loss_coef: 1
+  lr: 5e-5
+  weight_decay: 0
+  adam_epsilon: 1e-8
+  seed: 5
+  save_every: 1
+  decay_epoch: 4
+  run_name: Proposed_model
+  tag: Thr_p1_softmax
+Model:
+  pad_id: 0
