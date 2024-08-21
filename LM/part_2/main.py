@@ -167,7 +167,7 @@ def main(args):
                         wandb.log({"train/loss": loss,
                                    "validation/ppl": ppl_dev,
                                    "validation/loss": loss_dev,
-                                   "train/lr": scheduler.get_last_lr()[0]},
+                                   "train/lr": optimizer.param_groups[0]['lr']},
                                   step=epoch)
 
                     # Save the best model based on validation perplexity
@@ -202,7 +202,7 @@ def main(args):
                         wandb.log({"train/loss": loss,
                                    "validation/ppl": ppl_dev,
                                    "validation/loss": loss_dev,
-                                   "train/lr": scheduler.get_last_lr()[0]},
+                                   "train/lr": optimizer.param_groups[0]['lr']},
                                   step=epoch)
                     print("\nPpa is {} and loss is {}".format(ppl_dev, np.asarray(loss_dev).mean()))
 

@@ -14,7 +14,6 @@ from model import NluModelBert
 # Attempt to import wandb for experiment tracking
 try:
     import wandb
-
     deactivate_wandb = 0
 except ImportError:
     print("WANDB is not available please install")
@@ -139,7 +138,6 @@ def main(config):
         t_total = len(train_loader) // config.Training.gradient_accumulation_steps * config.Training.num_epochs
         warm_up_step = len(train_loader) * config.Training.warmup_steps
         load_args = checkpoint['args']
-        load_config = checkpoint['config']
 
         # Initialize model from checkpoint
         model = NluModelBert.load_from_checkpoint(checkpoint_path=checkpoint_path, strict=True,

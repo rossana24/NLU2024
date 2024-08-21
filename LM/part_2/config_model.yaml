@@ -8,7 +8,7 @@ Dataset:
 Training:
   optimizer: sgd
   num_epochs: 200
-  eval_path: "/content/drive/MyDrive/NLU/LM/part_2/bin/20240818_102803_Proposed_model_complete_TBPTT/"
+  eval_path: ""
   lr: 1
   weight_decay: 1.2e-6
   clip: 5
@@ -18,7 +18,7 @@ Training:
   save_every: 1
   decay_epoch: 4
   run_name: Proposed_model
-  tag: TW_VD_l1
+  tag: complete
   watch_wandb: True
   wandb: True
 Model:
@@ -33,7 +33,7 @@ Model:
   dropout_locked_i: 0.4
   dropout_locked_h: 0.3
   dropout_locked_o: 0.4
-  tbptt: True
+  tbptt: False
   tbptt_config:
     mu: 30
     std: 5

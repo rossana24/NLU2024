@@ -5,7 +5,6 @@ from transformers.models.bert.modeling_bert import BertPreTrainedModel, BertMode
 from sklearn.metrics import classification_report
 from conll import evaluate
 import torch
-from torchcrf import CRF
 
 
 class IntentClassifier(nn.Module):
@@ -123,9 +122,6 @@ class BertModelSlotsIntent(BertPreTrainedModel):
         # Slot classifier using sequence output from BERT
         self.slot_classifier = SlotClassifier(config.hidden_size, self.num_slot_labels, args.Training.dropout)
 
-        # Optional: Conditional Random Field (CRF) for slot filling
-        if args.Training.activate_crf:
-            self.crf = CRF(num_tags=self.num_slot_labels, batch_first=True)
 
     def forward(self, input_ids, attention_mask, token_type_ids):
         outputs = self.bert(input_ids, attention_mask=attention_mask,
@@ -145,12 +141,10 @@ class BertModelSlotsIntent(BertPreTrainedModel):
 
         # Uncomment this line to use an intent classifier that aggregates slot logits
         #slots_aggregated = slot_logits.max(dim=1)[0]  # Shape: [batch_size, num_slot_labels]
-        # intent_logits = self.intent_classifier(pooled_output, slots_aggregated)
+        #intent_logits = self.intent_classifier(pooled_output, slots_aggregated)
 
         intent_logits = self.intent_classifier(pooled_output)
-
-        if not self.args.Training.activate_crf:
-            slot_logits = slot_logits.permute(0, 2, 1)
+        slot_logits = slot_logits.permute(0, 2, 1)
 
         return intent_logits, slot_logits
 
@@ -235,12 +229,8 @@ class NluModelBert(pl.LightningModule):
 
         intent_logits, slot_logits = self(**inputs)
 
-        if self.args.Training.activate_crf:
-            # Compute the negative log-likelihood for CRF
-            loss_slot = -1 * self.model.crf(slot_logits, slots, mask=attention.byte(), reduction='mean')
-        else:
-            # Compute the cross-entropy loss for slot filling
-            loss_slot = self.criterion_slots(slot_logits, slots)
+        # Compute the cross-entropy loss for slot filling
+        loss_slot = self.criterion_slots(slot_logits, slots)
 
         loss_intent = self.criterion_intents(intent_logits, intents)
         loss = loss_intent + self.args.Training.slot_loss_coef * loss_slot
@@ -267,14 +257,8 @@ class NluModelBert(pl.LightningModule):
 
         # Compute the loss for intent classification nad slot filling
         loss_intent = self.criterion_intents(intent_logits, intents)
-        if self.args.Training.activate_crf:
-            loss_slot = -1 * self.model.crf(slot_logits, slots, mask=attention.byte(), reduction='mean')
-        else:
-            loss_slot = self.criterion_slots(slot_logits, slots)
+        loss_slot = self.criterion_slots(slot_logits, slots)
         loss = loss_intent + self.args.Training.slot_loss_coef * loss_slot
-
-        if self.args.Training.activate_crf:
-            slot_logits = self.model.crf.decode(slot_logits)
 
         # Convert reference intent IDs to labels
         ref_intents = [self.lang.id2intent[x] for x in intents.tolist()]
@@ -284,10 +268,7 @@ class NluModelBert(pl.LightningModule):
         ref_slots = []
         hyp_slots = []
 
-        if not self.args.Training.activate_crf:
-            output_slots = torch.argmax(slot_logits, dim=1)
-        else:
-            output_slots = slot_logits
+        output_slots = torch.argmax(slot_logits, dim=1)
 
         # Detokenize and process each sequence in the batch
         for id_seq, seq in enumerate(output_slots):
@@ -309,12 +290,8 @@ class NluModelBert(pl.LightningModule):
             for index, gt_id in enumerate(gt_ids):
                 # Skip padding tokens inserted in the middle of the sentence after tokenization
                 if gt_id != self.pad_token_label_id:
-                    if self.args.Training.activate_crf:
-                        gt_slots.append(self.lang.id2slot[gt_id])
-                        to_decode.append(self.lang.id2slot[seq[index]])
-                    else:
-                        gt_slots.append(self.lang.id2slot[gt_id])
-                        to_decode.append(self.lang.id2slot[seq[index].detach().cpu().item()])
+                    gt_slots.append(self.lang.id2slot[gt_id])
+                    to_decode.append(self.lang.id2slot[seq[index].detach().cpu().item()])
 
             assert len(utterance) == len(
                 to_decode), f"Length mismatch: utterance ({len(utterance)}) != to_decode ({len(to_decode)})"

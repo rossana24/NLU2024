@@ -10,40 +10,6 @@ import pytorch_lightning as pl
 from conll import evaluate
 from sklearn.metrics import classification_report
 
-"""
-class ModelIAS(nn.Module):
-
-    def __init__(self, hidden_size, out_slot, output_intent, emb_size, vocab_len, n_layer=1, pad_index=0):
-        super(ModelIAS, self).__init__()
-
-        self.embedding = nn.Embedding(vocab_len, emb_size, padding_idx=pad_index)
-
-        self.utt_encoder = nn.LSTM(emb_size, hidden_size, n_layer, bidirectional=False, batch_first=True)
-        self.slot_out = nn.Linear(hidden_size, out_slot)
-        self.intent_out = nn.Linear(hidden_size, output_intent)
-        self.dropout = nn.Dropout(0.1)
-
-    def forward(self, utterance, seq_lengths):
-
-        utt_emb = self.embedding(utterance)
-        packed_input = pack_padded_sequence(utt_emb, seq_lengths.cpu().numpy(), batch_first=True)
-        packed_output, (last_hidden, cell) = self.utt_encoder(packed_input)
-
-        # Unpack the sequence
-        utt_encoded, input_sizes = pad_packed_sequence(packed_output, batch_first=True)
-        # Get the last hidden state
-        last_hidden = last_hidden[-1, :, :]
-        # Compute slot logits
-        slots = self.slot_out(utt_encoded)
-        # Compute intent logits
-        intent = self.intent_out(last_hidden)
-
-        # Slot size: batch_size, seq_len, classes
-        slots = slots.permute(0, 2, 1)  # We need this for computing the loss
-        # Slot size: batch_size, classes, seq_len
-        return slots, intent
-"""
-
 
 class ModelIASBaseline(nn.Module):
     """

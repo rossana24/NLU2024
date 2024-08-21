@@ -19,4 +19,5 @@ To run the model, execute the main script.
 - Data Loading: Functions to load and preprocess data.
 - Preprocessing: Includes handling of text data and vocabulary creation.
 - Validation Set Creation: During preprocessing, a validation set is created from 10% of the training data. This split helps in evaluating the model's performance during training.
-- Vocabulary Management: A vocabulary variable is created to store the vocabulary from the training set. For OOV data, the token is set as UNK in the validation and test sets. 
+- Vocabulary Management: A vocabulary variable is created to store the vocabulary from the training set. For OOV data, the token is set as UNK in the validation and test sets.
+

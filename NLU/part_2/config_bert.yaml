@@ -28,7 +28,6 @@ Training:
   tag: Final_model
   watch_wandb: True
   wandb: True
-  activate_crf: False
 Model:
   seq_length: 50
   pad_id: 0
